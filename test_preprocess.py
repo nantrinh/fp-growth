@@ -1,10 +1,10 @@
-import fp_tree
+import preprocess as pp
 import unittest
 from collections import defaultdict
 import ipdb
 
 
-class TestStringMethods(unittest.TestCase):
+class TestPreprocess(unittest.TestCase):
 
     def setUp(self):
         transactions = [
@@ -25,7 +25,7 @@ class TestStringMethods(unittest.TestCase):
             for item in t:
                 answer[item] += 1
         self.assertEqual(
-            fp_tree.initial_count(
+            pp.initial_count(
                 self.example['transactions']),
             answer)
 
@@ -33,7 +33,7 @@ class TestStringMethods(unittest.TestCase):
         sigma = 2
         answer = {2: 2, 3: 3, 4: 4, 7: 2}
         self.assertEqual(
-            fp_tree.prune(
+            pp.prune(
                 self.example['all_counts'],
                 sigma),
             answer)
@@ -47,7 +47,7 @@ class TestStringMethods(unittest.TestCase):
             [4, 3]
         ]
         self.assertEqual(
-            fp_tree.clean(
+            pp.clean(
                 self.example['transactions'],
                 counts_with_min_support),
             answer)
