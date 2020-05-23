@@ -1,17 +1,40 @@
-# assuming data can fit in memory
+import ipdb
+from collections import defaultdict
+from typing import List
 
-# the result is a list of sets
-# each set corresponds to a transaction
-#
-# Example:
-# [
-#   {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29},
-#   {32, 30, 31},
-#   {33, 34, 35},
-#   {36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46},
-#   {48, 47, 38, 39}
-# ]
-datalist = [set([int(x) for x in line.split()]) for line in open('retail_25k.dat')] 
+def main(sigma=2):
+    preconstruction(transactions)
 
-# Try FP trees
-# https://docs.rapidminer.com/latest/studio/operators/modeling/associations/fp_growth.html
+def preconstruction(transactions):
+  # Count how many times each item occurs across all transactions
+  counts = initial_count(transactions)
+  # Only keep the items that occur at least sigma times in the transactions
+  counts = prune(counts, sigma)
+  # Filter out the items per transaction
+  # Sort the items in each transaction in order of how often they occur across all transactions
+  transactions = clean(transactions, counts)
+
+  ipdb.set_trace()
+
+def initial_count(transactions):
+    """
+    Return a dictionary containing total counts of each item across all transactions
+    """
+    counts = defaultdict(lambda: 0) 
+    for t in transactions:
+        for item in t:
+            counts[item] += 1
+    return counts
+
+def prune(counts, sigma):
+    return dict((k, v) for (k, v) in counts.items() if v >= sigma)
+
+def clean(transactions, counts):
+    transactions = [set(t).intersect(set(counts.keys())) for t in transactions]
+    transactions = [t.sort(key=lambda v: counts[v], reverse=True)]
+    return transactions
+
+if __name__ == '__main__':
+  # assuming data can fit in memory
+  transactions = [list(map(int, line.split())) for line in open('retail_25k.dat')] 
+  main(transactions)
