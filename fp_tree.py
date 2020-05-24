@@ -4,13 +4,32 @@ Implementation of FPTree
 
 from collections import defaultdict
 
+
+class LinkedListNode():
+    def __init__(self, value=None):
+        self.value = value
+        self.next = None
+
+
+class LinkedList():
+    def __init__(self, head=None):
+        if not head:
+            head = LinkedListNode()
+        self.head = head
+        self.tail = head
+
+    def add(self, value):
+        self.tail.next = LinkedListNode(value)
+        self.tail = self.tail.next
+
+
 class FPNode:
     def __init__(self, value=None, parent=None):
-        self.value = value 
+        self.value = value
         self.count = 1
         self.children = {}
-        self.parent = parent 
-    
+        self.parent = parent
+
     def child(self, value):
         return self.children.get(value)
 
@@ -21,27 +40,10 @@ class FPNode:
         self.count += 1
 
 
-class LinkedListNode():
-    def __init__(self, value=None):
-        self.value = value 
-        self.next = None 
-
-class LinkedList():
-    def __init__(self, head=None):
-        if not head:
-            head = LinkedListNode()
-        self.head = head
-        self.tail = head
-
-    def add(self, value):
-        self.tail.next = LinkedListNode(value) 
-        self.tail = self.tail.next
-
-
 class FPTree:
     def __init__(self):
         self.root = FPNode()
-        self.linked_lists = defaultdict(lambda: LinkedList()) 
+        self.linked_lists = defaultdict(lambda: LinkedList())
 
     def add(self, transaction):
         """
@@ -59,7 +61,7 @@ class FPTree:
                 prev.add_child(item)
                 curr = prev.child(item)
                 # keep track of it in linked list
-                self.linked_lists[item].add(curr) 
+                self.linked_lists[item].add(curr)
 
             # move prev pointer
             prev = curr
@@ -77,7 +79,7 @@ class FPTree:
         paths = []
         curr = self.linked_lists[item].head
         while curr.next:
-            # process next bottom node 
+            # process next bottom node
             tree_curr = curr.next.value
             path_curr = []
             while tree_curr.parent.value:
@@ -87,4 +89,3 @@ class FPTree:
             paths.append(path_curr)
             curr = curr.next
         return paths
-
