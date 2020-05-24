@@ -65,7 +65,7 @@ class FPTree:
             prev = curr
 
     def all_prefix_paths(self):
-        return NotImplementedError
+        return {k: self.prefix_paths(k) for k in self.linked_lists}
 
     def prefix_paths(self, item):
         """
