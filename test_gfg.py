@@ -11,13 +11,11 @@ class TestFPTree(unittest.TestCase):
         self.example = {
             'filtered_transactions': ['kemoy', 'keoy', 'kem', 'kmy', 'keo'],
             'counts': {'k': 5, 'e': 4, 'm': 3, 'o': 3, 'y': 3},
-            'count_order': [[5, 4, 2, 1, 1], [5, 4, 2, 1], [5, 4, 2], [5, 1, 1], [5, 4, 2]] 
+            'count_order': [[5, 4, 2, 1, 1], [5, 4, 2, 1], [5, 4, 2], [5, 1, 1], [5, 4, 2]],
+            'll_order': [[1, 1, 1], [1, 2], [2, 1], [4], [5]] 
         }
 
-    def test_add(self):
-        """
-        FPTree creation
-        """
+    def test_fptree_creation(self):
         tree = fpt.FPTree()
         for t in self.example['filtered_transactions']:
             tree.add(t)
@@ -35,7 +33,25 @@ class TestFPTree(unittest.TestCase):
                 self.assertEqual(curr.parent, prev)
                 prev = curr
 
-#        # Check linked lists (used to generate prefix path subtrees) 
+    def test_fptree_linked_lists(self):
+        tree = fpt.FPTree()
+        for t in self.example['filtered_transactions']:
+            tree.add(t)
+        
+        for i, item in enumerate('yomek'):
+            print(f'Evaluating {item}')
+            j = 0
+            # first one is a dummy
+            ll_node = tree.linked_lists[item].head
+            while ll_node.next:
+                ll_node = ll_node.next
+                # the value of the ll node points to an FPNode
+                # print(f"actual: {ll_node.value.count} expected: {self.example['ll_order'][i][j]}")
+                self.assertEqual(ll_node.value.count, self.example['ll_order'][i][j])
+                j += 1
+
+
+
 #        expected_ll_counts = {
 #            4: [4],
 #            3: [3],
