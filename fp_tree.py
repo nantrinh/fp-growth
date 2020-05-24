@@ -20,16 +20,17 @@ def header_dict(filtered_counts):
                 } for (k, v) in filtered_counts.items()} 
 
 class FPNode:
-    def __init__(self, value=None):
+    def __init__(self, value=None, parent=None):
         self.value = value 
         self.count = 1
         self.children = {}
+        self.parent = parent 
     
     def child(self, value):
         return self.children.get(value)
 
     def add_child(self, value):
-        self.children[value] = FPNode(value)
+        self.children[value] = FPNode(value, self)
 
     def increment_count(self):
         self.count += 1

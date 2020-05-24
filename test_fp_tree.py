@@ -28,12 +28,14 @@ class TestFPTree(unittest.TestCase):
 
         for t in self.example['filtered_transactions']:
             # print(f'Processing transaction {t}')
-            node = tree.root
+            prev = tree.root
             for item in t:
                 # print(f'Processing item {item}')
-                node = node.child(item)
-                self.assertEqual(node.value, item)
-                self.assertEqual(node.count, expected_counts[k])
+                curr = prev.child(item)
+                self.assertEqual(curr.value, item)
+                self.assertEqual(curr.count, expected_counts[k])
+                self.assertEqual(curr.parent, prev)
+                prev = curr
                 k += 1
                 # print(node.count)
 
