@@ -74,7 +74,7 @@ class FPTree:
         Return prefix paths for this item
         [[iterator, count at leaf]]
 
-        Returns empty list if item is at the root.
+        Returns [[None, 0]] if item is at the root.
 
         Traverse singly linked list
         For each bottom node for this item, traverse upwards and build path
@@ -93,4 +93,8 @@ class FPTree:
             if path_curr:
                 paths.append([reversed(path_curr), leaf_count])
             curr = curr.next
-        return paths
+
+        if paths:
+            return paths
+        else:
+            return [[None, 0]]
