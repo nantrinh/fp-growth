@@ -24,15 +24,15 @@ class TestFPTree(unittest.TestCase):
 
         # Check value, count, and parent 
         for i, t in enumerate(self.example['filtered_transactions']):
-            print(f'Processing transaction {t}')
+            # print(f'Processing transaction {t}')
             prev = tree.root
             for j, item in enumerate(t):
-                print(f'Processing item {item}')
+                # print(f'Processing item {item}')
                 curr = prev.child(item)
                 self.assertEqual(curr.value, item)
-#                self.assertEqual(curr.count, self.example['count_order'][i][j])
-                print(curr.count)
-                #self.assertEqual(curr.parent, prev)
+                self.assertEqual(curr.count, self.example['count_order'][i][j])
+                # print(curr.count)
+                self.assertEqual(curr.parent, prev)
                 prev = curr
 
 #        # Check linked lists (used to generate prefix path subtrees) 
