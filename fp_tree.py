@@ -72,6 +72,9 @@ class FPTree:
     def prefix_paths(self, item):
         """
         Return prefix paths for this item
+        [[iterator, count at leaf]]
+
+        Returns empty list if item is at the root.
 
         Traverse singly linked list
         For each bottom node for this item, traverse upwards and build path
@@ -82,10 +85,12 @@ class FPTree:
             # process next bottom node
             tree_curr = curr.next.value
             path_curr = []
+            leaf_count = tree_curr.count
             while tree_curr.parent.value:
                 # add to path and traverse upwards
                 path_curr.append(tree_curr.parent.value)
                 tree_curr = tree_curr.parent
-            paths.append(path_curr)
+            if path_curr:
+                paths.append([reversed(path_curr), leaf_count])
             curr = curr.next
         return paths
