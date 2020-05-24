@@ -1,23 +1,8 @@
 """
 Implementation of FPTree
-
-https://dzone.com/articles/machinex-understanding-fp-tree-construction
 """
 
 from collections import defaultdict
-
-# TODO: I think this should be part of the FP Tree
-def header_dict(filtered_counts):
-    """
-    Returns a dict to hold
-    - frequency across all transactions
-    - linked list of the item's occurences when building the fp tree
-    - count of co-occurences (along the path) 
-    """
-    return {k: {'freq': v,
-                'node': FPNode(),
-                'count': 0
-                } for (k, v) in filtered_counts.items()} 
 
 class FPNode:
     def __init__(self, value=None, parent=None):
@@ -36,9 +21,27 @@ class FPNode:
         self.count += 1
 
 
+class LinkedListNode():
+    def __init__(self, value=None):
+        self.value = value 
+        self.next = None 
+
+class LinkedList():
+    def __init__(self, head=None):
+        if not head:
+            head = LinkedListNode()
+        self.head = head
+        self.tail = head
+
+    def add(self, value):
+        self.tail.next = LinkedListNode(value) 
+        self.tail = self.tail.next
+
+
 class FPTree:
     def __init__(self):
         self.root = FPNode()
+        self.linked_lists = defaultdict(lambda: LinkedList()) 
 
     def add(self, transaction):
         """
@@ -55,5 +58,33 @@ class FPTree:
             else:
                 prev.add_child(item)
                 curr = prev.child(item)
+                # keep track of it in linked list
+                self.linked_lists[item].add(curr) 
+
             # move prev pointer
             prev = curr
+
+    def all_prefix_paths(self):
+        return NotImplementedError
+
+    def prefix_paths(self, item):
+        """
+        Return prefix paths for this item
+
+        Traverse singly linked list
+        For each bottom node for this item, traverse upwards and build path
+        """
+        paths = []
+        curr = self.linked_lists[item].head
+        while curr.next:
+            # process next bottom node 
+            tree_curr = curr.next.value
+            path_curr = []
+            while tree_curr.parent.value:
+                # add to path and traverse upwards
+                path_curr.append(tree_curr.parent.value)
+                tree_curr = tree_curr.parent
+            paths.append(path_curr)
+            curr = curr.next
+        return paths
+
