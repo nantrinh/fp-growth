@@ -22,7 +22,7 @@ def header_dict(filtered_counts):
 class FPNode:
     def __init__(self, value=None):
         self.value = value 
-        self.count = 0
+        self.count = 1
         self.children = {}
     
     def child(self, value):
