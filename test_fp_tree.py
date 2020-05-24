@@ -23,6 +23,9 @@ class TestFPTree(unittest.TestCase):
         for t in self.example['filtered_transactions']:
             tree.add(t)
 
+        expected_counts = [4, 3, 2, 4, 3, 2, 1, 4, 1, 4, 3]
+        k = 0
+
         for t in self.example['filtered_transactions']:
             # print(f'Processing transaction {t}')
             node = tree.root
@@ -30,6 +33,8 @@ class TestFPTree(unittest.TestCase):
                 # print(f'Processing item {item}')
                 node = node.child(item)
                 self.assertEqual(node.value, item)
+                self.assertEqual(node.count, expected_counts[k])
+                k += 1
                 # print(node.count)
 
 if __name__ == '__main__':
