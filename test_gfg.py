@@ -29,7 +29,7 @@ class TestFPTree(unittest.TestCase):
                 'o': [['k', 'e'], 3],
                 'm': [['k'], 3],
                 'e': [['k'], 4],
-                'k': [[None, 0]],
+                'k': [[], 0],
             },
             'tree': None,
         }
@@ -61,7 +61,8 @@ class TestFPTree(unittest.TestCase):
             while ll_node.next:
                 ll_node = ll_node.next
                 # the value of the ll node points to an FPNode
-                # print(f"actual: {ll_node.value.count} expected: {self.example['ll_order'][i][j]}")
+                # print(f"actual: {ll_node.value.count} expected:
+                # {self.example['ll_order'][i][j]}")
                 self.assertEqual(
                     ll_node.value.count,
                     self.example['ll_order'][i][j])
@@ -75,19 +76,19 @@ class TestFPTree(unittest.TestCase):
             # forcing a list and joining to compare with the expected output
             # I defined in the example
             paths = [[''.join(list(p[0])), p[1]] if p[0] else p for p in paths]
-            print(paths)
+            # print(paths)
             self.assertEqual(
                 len(self.example['prefix_paths'][item]), len(paths))
             for p in paths:
                 self.assertTrue(p in self.example['prefix_paths'][item])
 
-#    def test_conditional_fptree_elements(self):
-#        """Longest common prefixes for each prefix path"""
-#        for item in self.example['traversal_order']:
-#            paths = self.example['tree'].prefix_paths(item)
-#            output = fp_helper.conditional_fptree_elements(paths)
-#            print(f"output: {output} expected: {self.example['lcp'][item]}")
-#            self.assertEqual(output, self.example['lcp'][item])
+    def test_conditional_fptree_elements(self):
+        """Longest common prefixes for each prefix path"""
+        for item in self.example['traversal_order']:
+            paths = self.example['tree'].prefix_paths(item)
+            output = fp_helper.conditional_fptree_elements(paths)
+            print(f"output: {output} expected: {self.example['lcp'][item]}")
+            self.assertEqual(output, self.example['lcp'][item])
 
 
 
