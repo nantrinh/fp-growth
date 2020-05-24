@@ -21,7 +21,7 @@ def initial_count(transactions):
     """
     counts = defaultdict(lambda: 0)
     for t in transactions:
-        for item in t:
+        for item in set(t):
             counts[item] += 1
     return counts
 
