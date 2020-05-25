@@ -38,25 +38,16 @@ def yield_results(results, min_length, min_support):
         if len(k) >= min_length and v >= min_support:
             yield (k, v) 
 
-def write(file_obj, patterns):
+def write(file_obj, pattern, support):
     """
     Writes patterns to file in this format:
     pattern_size, support/count, item1, item2, ... 
 
     Input:
-      patterns generator
-      yields a list in this format: [['k', 'o'], 3]
-
-    Output: 
-      patterns written to file, with their length and support
+      pattern iterable, support
+      e.g., ('e', 'd', 'a'), 2
     """
-    try:
-        while True:
-            p, count = next(patterns)
-            # print(p, count)
-            if p:
-                line = f"{len(p)}, {str(count)}, {', '.join(map(str, p))}\n"
-                # print(f"THE LINE IS: {line}")
-                file_obj.write(line) 
-    except StopIteration:
-        pass
+
+    line = f"{len(pattern)}, {support}, {', '.join(map(str, pattern))}\n"
+    print(f"THE LINE IS: {line}")
+    file_obj.write(line) 
