@@ -30,11 +30,11 @@ class TestFPTree(unittest.TestCase):
                 'k': [[], 0],
             },
             'frequent_patterns': {
-                'y': [[['k', 'y'], 3]],
-                'o': [[['k', 'o'], 3], [['e', 'o'], 3], [['e', 'k', 'o'], 3]],
-                'm': [[['k', 'm'], 3]],
-                'e': [[['e', 'k'], 3]],
-                'k': [[[], 0]]
+                'y': [[set(['k', 'y']), 3]],
+                'o': [[set(['k', 'o']), 3], [set(['e', 'o']), 3], [set(['e', 'k', 'o']), 3]],
+                'm': [[set(['k', 'm']), 3]],
+                'e': [[set(['e', 'k']), 4]],
+                'k': []
             },
             'tree': None,
         }
@@ -92,22 +92,19 @@ class TestFPTree(unittest.TestCase):
         for item in self.example['traversal_order']:
             paths = self.example['prefix_paths'][item]
             output = fp_helper.conditional_fptree_elements(paths)
-            print(f"output: {output} expected: {self.example['lcp'][item]}")
+            # print(f"output: {output} expected: {self.example['lcp'][item]}")
             self.assertEqual(output, self.example['lcp'][item])
 
     def test_frequent_patterns(self):
         for item in self.example['traversal_order']:
             lcp = self.example['lcp'][item]
-            patterns = fp_helper.frequent_patterns(lcp)
+            patterns = fp_helper.frequent_patterns(item, lcp)
+            patterns = [[set(p[0]), p[1]] for p in patterns]
+            print(patterns)
             print(f"{item}: output: {patterns} expected: {self.example['frequent_patterns'][item]}")
             self.assertEqual(len(patterns), len(self.example['frequent_patterns'][item]))
             for p in patterns:
                 self.assertTrue(p in self.example['frequent_patterns'][item])
-
-
-
-
-
 
 if __name__ == '__main__':
     unittest.main()

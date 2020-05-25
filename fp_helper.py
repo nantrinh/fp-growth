@@ -1,3 +1,5 @@
+from itertools import combinations
+
 def conditional_fptree_elements(prefix_paths):
     """
     Input:
@@ -30,3 +32,30 @@ def longest_common_prefix(sorted_iterable):
         # using zip automatically means you only iterate as much as the
         # min length of i1 and i2
         return [x for (x, y) in zip(i1, i2) if x == y] 
+
+def frequent_patterns(item, elements):
+    """
+    This is a generator function.
+
+    Input:
+      item: usually a char or int  
+      Example: 'o'
+      
+      elements: [[conditional frequent patterns], count]
+      Example: [['k', 'e'], 3]
+
+    Output:
+      yields all possible subsets of elements and item
+      Example: 
+      [[['k', 'o'], 3], [['e', 'o'], 3], [['e', 'k', 'o'], 3]],
+    """
+    to_combine, count = elements
+    print(f'inputs: {item}, {to_combine}, {count}')
+    for i in range(1, len(to_combine) + 1):
+        print(f'i: {i}')
+        C = combinations(to_combine, i) 
+        try:
+            while True:
+                yield [list(next(C)) + [item], count]
+        except StopIteration:
+            pass
