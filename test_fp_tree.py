@@ -1,82 +1,60 @@
-import fp_tree as fpt
-import preprocess as pp
 import unittest
-from collections import defaultdict
-import ipdb
+
+import fp_tree as fpt
+from examples import examples
 
 
 class TestFPTree(unittest.TestCase):
 
     def setUp(self):
-        filtered_transactions = [[4, 3, 2], [4, 3, 2, 7], [4, 7], [4, 3]]
-        counts = {2: 2, 3: 3, 4: 4, 7: 2}
-        self.example = {
-            'filtered_transactions': filtered_transactions,
-            'counts': counts
-        }
+        self.examples = examples()
 
-    def test_add(self):
-        """
-        FPTree is created properly
-        """
-        tree = fpt.FPTree()
-        for t in self.example['filtered_transactions']:
-            tree.add(t)
+    def test_fptree_creation(self):
+        for example in self.examples:
+            # Check value, count, and parent
+            for i, t in enumerate(example['filtered_transactions']):
+                # print(f'Processing transaction {t}')
+                prev = example['tree'].root
+                for j, item in enumerate(t):
+                    # print(f'Processing item {item}')
+                    curr = prev.child(item)
+                    self.assertEqual(curr.value, item)
+                    self.assertEqual(curr.count, example['count_order'][i][j])
+                    # print(curr.count)
+                    self.assertEqual(curr.parent, prev)
+                    prev = curr
 
-        expected_counts = [4, 3, 2, 4, 3, 2, 1, 4, 1, 4, 3]
-        k = 0
-
-        # Check value, count, and parent 
-        for t in self.example['filtered_transactions']:
-            # print(f'Processing transaction {t}')
-            prev = tree.root
-            for item in t:
-                # print(f'Processing item {item}')
-                curr = prev.child(item)
-                self.assertEqual(curr.value, item)
-                self.assertEqual(curr.count, expected_counts[k])
-                self.assertEqual(curr.parent, prev)
-                prev = curr
-                k += 1
-                # print(node.count)
-
-        # Check linked lists (used to generate prefix path subtrees) 
-        expected_ll_counts = {
-            4: [4],
-            3: [3],
-            2: [2],
-            7: [1, 1]
-        } 
-
-        for (k, exp) in expected_ll_counts.items():
-            # print(f'Checking item {k}')
-            node = tree.linked_lists[k].head
-            self.assertEqual(node.value, None)
-            i = 0
-            while node.next:
-                # print(f'Count: {node.next.value.count}')
-                self.assertEqual(node.next.value.count, exp[i])
-                i += 1
-                node = node.next
+    def test_fptree_linked_lists(self):
+        for example in self.examples:
+            for i, item in enumerate(example['traversal_order']):
+                # print(f'Evaluating {item}')
+                j = 0
+                # first one is a dummy
+                ll_node = example['tree'].linked_lists[item].head
+                while ll_node.next:
+                    ll_node = ll_node.next
+                    # the value of the ll node points to an FPNode
+                    # print(f"actual: {ll_node.value.count} expected:
+                    # {self.example['ll_order'][i][j]}")
+                    self.assertEqual(
+                        ll_node.value.count,
+                        example['ll_order'][i][j])
+                    j += 1
 
     def test_prefix_paths(self):
-        # TODO: should probably manually create a tree here instead
-        tree = fpt.FPTree()
-        for t in self.example['filtered_transactions']:
-            tree.add(t)
-        
-        answer = {
-            7: [[2, 3, 4], [4]],
-            2: [[3, 4]],
-            3: [[4]],
-            4: [[]]
-        }
-
-        for k in answer:
-            # print(f'Processing item {k}')
-            output = tree.prefix_paths(k)
-            # print(f'Got {output}, expected {answer[k]}')
-            self.assertEqual(output, answer[k])
+        """Also known as conditional pattern base"""
+        for example in self.examples:
+            for item in example['traversal_order']:
+                paths = example['tree'].prefix_paths(item)
+                # print(item)
+                # forcing a list and joining to compare with the expected output
+                # I defined in the example
+                paths = [[list(p[0]), p[1]] if p[0] else p for p in paths]
+                # print(paths)
+                self.assertEqual(
+                    len(example['prefix_paths'][item]), len(paths))
+                for p in paths:
+                    self.assertTrue(p in example['prefix_paths'][item])
 
 
 if __name__ == '__main__':
