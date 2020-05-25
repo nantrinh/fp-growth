@@ -4,31 +4,30 @@ Implementation of FPTree
 
 from collections import defaultdict
 
-
-class LinkedListNode():
-    def __init__(self, value=None):
-        self.value = value
+class DummyNode:
+    """
+    Can be used as a head of a linked list
+    Keeps track of its tail
+    Appends new nodes and updates its tail attribute
+    """
+    def __init__(self):
+        self.tail = self 
         self.next = None
-
-
-class LinkedList():
-    def __init__(self, head=None):
-        if not head:
-            head = LinkedListNode()
-        self.head = head
-        self.tail = head
-
-    def add(self, value):
-        self.tail.next = LinkedListNode(value)
-        self.tail = self.tail.next
-
+    
+    def add(self, node):
+        self.tail.next = node
+        self.tail = node
 
 class FPNode:
-    def __init__(self, value=None, parent=None):
+    def __init__(self, value=None, parent=None, root=False):
         self.value = value
         self.count = 1
         self.children = {}
         self.parent = parent
+        self.root = root
+
+        # for linked list among nodes with same value
+        self.next = None
 
     def child(self, value):
         return self.children.get(value)
@@ -39,11 +38,17 @@ class FPNode:
     def increment_count(self):
         self.count += 1
 
+    def ancestors(self):
+        node = self.parent
+        while not node.root:
+            yield node
+            node = node.parent 
 
 class FPTree:
     def __init__(self):
-        self.root = FPNode()
-        self.linked_lists = defaultdict(lambda: LinkedList())
+        self.root = FPNode(root=True)
+        # first one is always a dummy
+        self.linked_lists = defaultdict(lambda: DummyNode())
 
     def add(self, transaction):
         """
@@ -65,33 +70,14 @@ class FPTree:
 
             # move prev pointer
             prev = curr
+    
+    def items(self):
+        return self.linked_lists.keys()
 
-    def prefix_paths(self, item, min_length_of_prefix=1):
-        """
-        Return prefix paths for this item
-        [[iterator, count at leaf]]
-
-        Returns [[None, 0]] if item is at the root.
-
-        Traverse singly linked list
-        For each bottom node for this item, traverse upwards and build path
-        """
-        paths = []
-        curr = self.linked_lists[item].head
+    def nodes(self, item):
+        # start with the dummy
+        curr = self.linked_lists[item]
+        # traverse linked list for nodes with the same value
         while curr.next:
-            # process next bottom node
-            tree_curr = curr.next.value
-            path_curr = []
-            leaf_count = tree_curr.count
-            while tree_curr.parent.value:
-                # add to path and traverse upwards
-                path_curr.append(tree_curr.parent.value)
-                tree_curr = tree_curr.parent
-            if len(path_curr) >= min_length_of_prefix:
-                paths.append([reversed(path_curr), leaf_count])
+            yield curr.next
             curr = curr.next
-
-        if paths:
-            return paths
-        else:
-            return [[None, 0]]
