@@ -35,7 +35,7 @@ def longest_common_prefix(sorted_iterable):
 
 def frequent_patterns(item, elements):
     """
-    This is a generator function.
+    Generates frequent patterns with associated counts.
 
     Input:
       item: usually a char or int  
@@ -58,4 +58,26 @@ def frequent_patterns(item, elements):
             while True:
                 yield [list(next(C)) + [item], count]
         except StopIteration:
-            pass
+            pass 
+
+def write(file_obj, patterns):
+    """
+    Writes patterns to file in this format:
+    pattern_size, support/count, item1, item2, ... 
+
+    Input:
+      patterns generator
+      yields a list in this format: [['k', 'o'], 3]
+
+    Output: 
+      patterns written to file, with their length and support
+    """
+    try:
+        while True:
+            p, count = next(patterns)
+            if p:
+                line = f"{len(p)}, {count}, {', '.join(p)}\n"
+                print(f"THE LINE IS: {line}")
+                file_obj.write(line) 
+    except StopIteration:
+        pass

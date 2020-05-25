@@ -100,11 +100,19 @@ class TestFPTree(unittest.TestCase):
             lcp = self.example['lcp'][item]
             patterns = fp_helper.frequent_patterns(item, lcp)
             patterns = [[set(p[0]), p[1]] for p in patterns]
-            print(patterns)
-            print(f"{item}: output: {patterns} expected: {self.example['frequent_patterns'][item]}")
+            # print(patterns)
+            # print(f"{item}: output: {patterns} expected: {self.example['frequent_patterns'][item]}")
             self.assertEqual(len(patterns), len(self.example['frequent_patterns'][item]))
             for p in patterns:
                 self.assertTrue(p in self.example['frequent_patterns'][item])
+
+    def test_write_to_file(self):
+        file_obj = open('temp.txt', 'a')
+        for item in self.example['traversal_order']:
+            lcp = self.example['lcp'][item]
+            patterns = fp_helper.frequent_patterns(item, lcp)
+            fp_helper.write(file_obj, patterns)
+        file_obj.close()
 
 if __name__ == '__main__':
     unittest.main()
