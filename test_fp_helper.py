@@ -40,7 +40,7 @@ class TestFPHelper(unittest.TestCase):
                 patterns = fp_helper.frequent_patterns(item, lcp)
                 fp_helper.write(file_obj, patterns)
             file_obj.close()
-
+            # TODO: open up file and check the results
 
 if __name__ == '__main__':
     unittest.main()
