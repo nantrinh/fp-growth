@@ -34,8 +34,7 @@ class TestFPTree(unittest.TestCase):
                 while ll_node.next:
                     ll_node = ll_node.next
                     # the value of the ll node points to an FPNode
-                    # print(f"actual: {ll_node.value.count} expected:
-                    # {self.example['ll_order'][i][j]}")
+                    # print(f"actual: {ll_node.value.count} expected: {example['ll_order'][i][j]}")
                     self.assertEqual(
                         ll_node.value.count,
                         example['ll_order'][i][j])
@@ -47,8 +46,6 @@ class TestFPTree(unittest.TestCase):
             for item in example['traversal_order']:
                 paths = example['tree'].prefix_paths(item)
                 # print(item)
-                # forcing a list and joining to compare with the expected output
-                # I defined in the example
                 paths = [[list(p[0]), p[1]] if p[0] else p for p in paths]
                 # print(paths)
                 self.assertEqual(
