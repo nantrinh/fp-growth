@@ -66,10 +66,7 @@ class FPTree:
             # move prev pointer
             prev = curr
 
-    def all_prefix_paths(self):
-        return {k: self.prefix_paths(k) for k in self.linked_lists}
-
-    def prefix_paths(self, item):
+    def prefix_paths(self, item, min_length_of_prefix=1):
         """
         Return prefix paths for this item
         [[iterator, count at leaf]]
@@ -90,7 +87,7 @@ class FPTree:
                 # add to path and traverse upwards
                 path_curr.append(tree_curr.parent.value)
                 tree_curr = tree_curr.parent
-            if path_curr:
+            if len(path_curr) >= min_length_of_prefix:
                 paths.append([reversed(path_curr), leaf_count])
             curr = curr.next
 
