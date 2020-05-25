@@ -1,5 +1,3 @@
-import ipdb
-
 def valid_solution_line(pattern_size, support, items, min_length, min_support):
     """
     line is an iterable in the format:
