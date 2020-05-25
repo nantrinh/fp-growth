@@ -1,68 +1,42 @@
 from itertools import combinations
+from collections import defaultdict
+import ipdb
 
-def conditional_fptree_elements(prefix_paths, min_support=1):
-    """
-    Input:
-    [[iterable path, count]]
-    For example: [['kemo', 1], ['keo', 1], ['km', 1]],
-
-    Output:
-    [longest common prefix among inputs, sum of all counts in input] 
-    For example: [['k', 3]]
-    """
-#    print(f'prefix_paths: {prefix_paths}')
-
-    paths, counts = zip(*prefix_paths)
-    sum_counts = sum(counts)
-    if sum_counts < min_support:
-        return [[], 0]
-    else:
-        return [longest_common_prefix(paths), sum_counts]
-
-def longest_common_prefix(sorted_iterable):
-    """
-    Input is an iterable of SORTED iterables
-    Output is a list of the longest common prefix
-
-    Since the input is sorted, the lcp between the first and last element
-    is also the lcp for all elements. 
-    """
-    if len(sorted_iterable) == 1:
-        return list(sorted_iterable[0]) if sorted_iterable[0] else [] 
-    else:
-        i1 = sorted_iterable[0]
-        i2 = sorted_iterable[-1]
-    
-        # using zip automatically means you only iterate as much as the
-        # min length of i1 and i2
-        return [x for (x, y) in zip(i1, i2) if x == y] 
-
-def frequent_patterns(item, elements, min_length_of_prefix=1):
+def frequent_patterns(tree, min_length, min_support):
     """
     Generates frequent patterns with associated counts.
-
-    Input:
-      item: usually a char or int  
-      Example: 'o'
-      
-      elements: [[conditional frequent patterns], count]
-      Example: [['k', 'e'], 3]
-
-    Output:
-      yields all possible subsets of elements and item
-      Example: 
-      [[['k', 'o'], 3], [['e', 'o'], 3], [['e', 'k', 'o'], 3]],
     """
-    to_combine, count = elements
-    # print(f'inputs: {item}, {to_combine}, {count}')
-    for i in range(min_length_of_prefix, len(to_combine) + 1):
-        # print(f'i: {i}')
-        C = combinations(to_combine, i) 
-        try:
-            while True:
-                yield [list(next(C)) + [item], count]
-        except StopIteration:
-            pass 
+
+    for item in tree.items():
+        print(f'PROCESSING ITEM {item}')
+        # this result dictionary has the format
+        # {tuple of pattern: support}
+        # for example: {('d', 'c', 'a'): 3}
+        # its entries and counts will be modified by the code below it
+        results = defaultdict(lambda: 0) 
+        # traverse the linked list for the item
+        for node in tree.nodes(item):
+            leaf_count = node.count
+            # they're all going to start with the same value
+            temp_paths = [[item]]
+            for ancestor in node.ancestors():
+                if not temp_paths:
+                    temp_paths.append(ancestor.value)
+                else:
+                    temp_paths.extend([p + [ancestor.value] for p in temp_paths])
+            update_counts(results, temp_paths, leaf_count)
+        for (k, v) in results.items():
+            if len(k) >= min_length and v >= min_support:
+                yield (k, v) 
+
+def update_counts(results, paths, leaf_count):
+    for p in paths:
+        results[tuple(p)] += leaf_count
+
+def yield_results(results, min_length, min_support):
+    for (k, v) in results:
+        if len(k) >= min_length and v >= min_support:
+            yield (k, v) 
 
 def write(file_obj, patterns):
     """
