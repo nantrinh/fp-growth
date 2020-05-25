@@ -5,7 +5,7 @@ import fp_tree
 import fp_helper
 
 
-def main(transactions, min_support=1, min_length=1,
+def main(transactions, min_length, min_support,
          file_location='output.txt'):
     # Preprocess transactions
     # Filter out those items that do not show up at least sigma times overall
@@ -18,25 +18,12 @@ def main(transactions, min_support=1, min_length=1,
     for t in filtered_transactions:
         tree.add(t)
 
-    # Get prefix paths, taking min_length into consideration
-    # Get conditional fptree elements (longest common prefix)
     # Generate frequent patterns
+    for (pattern, count) in fp_helper.frequent_patterns(tree, min_length, min_support):
+        print(pattern, count)
+
     # Write to file
-    file_obj = open(file_location, 'w')
-    for item in filtered_counts:
-        print(f"Processing item {item}")
-        # passing min_length - 1 as the min_length_of_prefix because the
-        # total length of a pattern will be prefix + item, or prefix + 1
-        prefix_paths = tree.prefix_paths(item, min_length - 1)
-        conditional_fptree_elements = fp_helper.conditional_fptree_elements(
-            prefix_paths, min_support)
-        print(f'{item}: {conditional_fptree_elements}')
-        # passing min_length - 1 as the min_length_of_prefix because the
-        # total length of a pattern will be prefix + item, or prefix + 1
-        frequent_patterns = fp_helper.frequent_patterns(
-            item, conditional_fptree_elements, min_length - 1)
-        fp_helper.write(file_obj, frequent_patterns)
-    file_obj.close()
+    #file_obj = open(file_location, 'w')
 
 if __name__ == '__main__':
     # assuming data can fit in memory
@@ -45,11 +32,11 @@ if __name__ == '__main__':
     # sigma = 4
     # min_length = 3
     transactions = ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce']
-    sigma = 2
-    min_length = 1
+    min_length = 3
+    min_support = 2
 
     import time
     start = time.perf_counter()
-    main(transactions, sigma, min_length, 'retail_output.txt')
+    main(transactions, min_length, min_support)
     end = time.perf_counter()
     print(f"Finished in {end - start:0.4f} seconds")
