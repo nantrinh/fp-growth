@@ -1,6 +1,6 @@
 from itertools import combinations
 
-def conditional_fptree_elements(prefix_paths):
+def conditional_fptree_elements(prefix_paths, min_support=1):
     """
     Input:
     [[iterable path, count]]
@@ -13,7 +13,11 @@ def conditional_fptree_elements(prefix_paths):
 #    print(f'prefix_paths: {prefix_paths}')
 
     paths, counts = zip(*prefix_paths)
-    return [longest_common_prefix(paths), sum(counts)]
+    sum_counts = sum(counts)
+    if sum_counts < min_support:
+        return [[], 0]
+    else:
+        return [longest_common_prefix(paths), sum_counts]
 
 def longest_common_prefix(sorted_iterable):
     """
@@ -50,9 +54,9 @@ def frequent_patterns(item, elements):
       [[['k', 'o'], 3], [['e', 'o'], 3], [['e', 'k', 'o'], 3]],
     """
     to_combine, count = elements
-    print(f'inputs: {item}, {to_combine}, {count}')
+    # print(f'inputs: {item}, {to_combine}, {count}')
     for i in range(1, len(to_combine) + 1):
-        print(f'i: {i}')
+        # print(f'i: {i}')
         C = combinations(to_combine, i) 
         try:
             while True:
@@ -75,9 +79,10 @@ def write(file_obj, patterns):
     try:
         while True:
             p, count = next(patterns)
+            # print(p, count)
             if p:
-                line = f"{len(p)}, {count}, {', '.join(p)}\n"
-                print(f"THE LINE IS: {line}")
+                line = f"{len(p)}, {str(count)}, {', '.join(map(str, p))}\n"
+                # print(f"THE LINE IS: {line}")
                 file_obj.write(line) 
     except StopIteration:
         pass
