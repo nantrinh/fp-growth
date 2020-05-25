@@ -18,21 +18,25 @@ def main(transactions, min_length, min_support,
     for t in filtered_transactions:
         tree.add(t)
 
-    # Generate frequent patterns
-    for (pattern, count) in fp_helper.frequent_patterns(tree, min_length, min_support):
-        print(pattern, count)
-
     # Write to file
-    #file_obj = open(file_location, 'w')
+    file_obj = open(file_location, 'w')
+
+    # Generate frequent patterns
+    for (pattern, support) in fp_helper.frequent_patterns(tree, min_length, min_support):
+        print(pattern, support)
+        fp_helper.write(file_obj, pattern, support)
+
+    file_obj.close()
+
 
 if __name__ == '__main__':
     # assuming data can fit in memory
     # transactions = [list(map(int, line.split()))
     #                 for line in open('retail_25k.dat')]
-    # sigma = 4
+    # min_support = 4
     # min_length = 3
     transactions = ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce']
-    min_length = 3
+    min_length = 1
     min_support = 2
 
     import time
