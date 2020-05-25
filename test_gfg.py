@@ -15,13 +15,11 @@ class TestFPTree(unittest.TestCase):
             'traversal_order': 'yomek',
             'count_order': [[5, 4, 2, 1, 1], [5, 4, 2, 1], [5, 4, 2], [5, 1, 1], [5, 4, 2]],
             'll_order': [[1, 1, 1], [1, 2], [2, 1], [4], [5]],
-            # 'kemo' is actually returned as ['k', 'e', 'm', 'o']
-            # but I wrote it as 'kemo' here for convenience
             'prefix_paths': {
-                'y': [['kemo', 1], ['keo', 1], ['km', 1]],
-                'o': [['kem', 1], ['ke', 2]],
-                'm': [['ke', 2], ['k', 1]],
-                'e': [['k', 4]],
+                'y': [[['k','e','m','o'], 1], [['k','e','o'], 1], [['k','m'], 1]],
+                'o': [[['k','e','m'], 1], [['k','e'], 2]],
+                'm': [[['k','e'], 2], [['k'], 1]],
+                'e': [[['k'], 4]],
                 'k': [[None, 0]]
             },
             'lcp': {
@@ -30,6 +28,13 @@ class TestFPTree(unittest.TestCase):
                 'm': [['k'], 3],
                 'e': [['k'], 4],
                 'k': [[], 0],
+            },
+            'frequent_patterns': {
+                'y': [[['k', 'y'], 3]],
+                'o': [[['k', 'o'], 3], [['e', 'o'], 3], [['e', 'k', 'o'], 3]],
+                'm': [[['k', 'm'], 3]],
+                'e': [[['e', 'k'], 3]],
+                'k': [[[], 0]]
             },
             'tree': None,
         }
@@ -75,7 +80,7 @@ class TestFPTree(unittest.TestCase):
             # print(item)
             # forcing a list and joining to compare with the expected output
             # I defined in the example
-            paths = [[''.join(list(p[0])), p[1]] if p[0] else p for p in paths]
+            paths = [[list(p[0]), p[1]] if p[0] else p for p in paths]
             # print(paths)
             self.assertEqual(
                 len(self.example['prefix_paths'][item]), len(paths))
@@ -85,10 +90,21 @@ class TestFPTree(unittest.TestCase):
     def test_conditional_fptree_elements(self):
         """Longest common prefixes for each prefix path"""
         for item in self.example['traversal_order']:
-            paths = self.example['tree'].prefix_paths(item)
+            paths = self.example['prefix_paths'][item]
             output = fp_helper.conditional_fptree_elements(paths)
             print(f"output: {output} expected: {self.example['lcp'][item]}")
             self.assertEqual(output, self.example['lcp'][item])
+
+    def test_frequent_patterns(self):
+        for item in self.example['traversal_order']:
+            lcp = self.example['lcp'][item]
+            patterns = fp_helper.frequent_patterns(lcp)
+            print(f"{item}: output: {patterns} expected: {self.example['frequent_patterns'][item]}")
+            self.assertEqual(len(patterns), len(self.example['frequent_patterns'][item]))
+            for p in patterns:
+                self.assertTrue(p in self.example['frequent_patterns'][item])
+
+
 
 
 
