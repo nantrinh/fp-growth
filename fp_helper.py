@@ -1,6 +1,5 @@
 from itertools import combinations
 from collections import defaultdict
-import ipdb
 
 def frequent_patterns(tree, min_length, min_support):
     """
@@ -8,7 +7,7 @@ def frequent_patterns(tree, min_length, min_support):
     """
 
     for item in tree.items():
-        print(f'PROCESSING ITEM {item}')
+        # print(f'PROCESSING ITEM {item}')
         # this result dictionary has the format
         # {tuple of pattern: support}
         # for example: {('d', 'c', 'a'): 3}
@@ -49,5 +48,5 @@ def write(file_obj, pattern, support):
     """
 
     line = f"{len(pattern)}, {support}, {', '.join(map(str, pattern))}\n"
-    print(f"THE LINE IS: {line}")
+    # print(f"THE LINE IS: {line}")
     file_obj.write(line) 

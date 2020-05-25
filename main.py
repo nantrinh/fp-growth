@@ -1,5 +1,3 @@
-import ipdb
-
 import preprocess as pp
 import fp_tree
 import fp_helper
@@ -23,24 +21,16 @@ def main(transactions, min_length, min_support,
 
     # Generate frequent patterns
     for (pattern, support) in fp_helper.frequent_patterns(tree, min_length, min_support):
-        print(pattern, support)
+        # print(pattern, support)
         fp_helper.write(file_obj, pattern, support)
 
     file_obj.close()
 
 
 if __name__ == '__main__':
-    # assuming data can fit in memory
-    # transactions = [list(map(int, line.split()))
-    #                 for line in open('retail_25k.dat')]
-    # min_support = 4
-    # min_length = 3
-    transactions = ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce']
-    min_length = 1
-    min_support = 2
+    transactions = [list(map(int, line.split()))
+                    for line in open('retail_25k.dat')]
+    min_support = 4
+    min_length = 3
 
-    import time
-    start = time.perf_counter()
     main(transactions, min_length, min_support)
-    end = time.perf_counter()
-    print(f"Finished in {end - start:0.4f} seconds")
