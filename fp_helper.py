@@ -37,7 +37,7 @@ def longest_common_prefix(sorted_iterable):
         # min length of i1 and i2
         return [x for (x, y) in zip(i1, i2) if x == y] 
 
-def frequent_patterns(item, elements):
+def frequent_patterns(item, elements, min_length_of_prefix=1):
     """
     Generates frequent patterns with associated counts.
 
@@ -55,7 +55,7 @@ def frequent_patterns(item, elements):
     """
     to_combine, count = elements
     # print(f'inputs: {item}, {to_combine}, {count}')
-    for i in range(1, len(to_combine) + 1):
+    for i in range(min_length_of_prefix, len(to_combine) + 1):
         # print(f'i: {i}')
         C = combinations(to_combine, i) 
         try:
