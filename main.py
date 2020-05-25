@@ -40,10 +40,13 @@ def main(transactions, min_support=1, min_length=1,
 
 if __name__ == '__main__':
     # assuming data can fit in memory
-    transactions = [list(map(int, line.split()))
-                    for line in open('retail_25k.dat')]
-    sigma = 4
-    min_length = 3
+    # transactions = [list(map(int, line.split()))
+    #                 for line in open('retail_25k.dat')]
+    # sigma = 4
+    # min_length = 3
+    transactions = ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce']
+    sigma = 2
+    min_length = 1
 
     import time
     start = time.perf_counter()

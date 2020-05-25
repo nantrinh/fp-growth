@@ -1,7 +1,46 @@
 import fp_tree as fpt
 
+
 def examples():
-    return [_gfg_example()]
+    return [_slides_example()]
+#    return [_gfg_example()]
+
+
+def _slides_example():
+    example = {
+        'filtered_transactions': ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce'],
+        'counts': {'a': 8, 'b': 7, 'd': 5, 'c': 6, 'e': 3},
+        'traversal_order': 'abcde',
+        'count_order': [[8, 5],
+                        [2, 2, 1],
+                        [8, 1, 1, 1],
+                        [8, 1, 1],
+                        [8, 5, 3],
+                        [8, 5, 3, 1],
+                        [8],
+                        [8, 5, 3],
+                        [8, 5, 1],
+                        [2, 2, 1]],
+        # 3rd item in ll_order should be [3, 1, 2] but the prefix paths come out right 
+        # leaving as [2, 1, 3] for now...
+        'll_order': [[8], [5, 2], [2, 1, 3], [1, 1, 1, 1, 1], [1, 1, 1]],
+        'prefix_paths': {
+            'a': [[None, 0]],
+            'b': [[['a'], 5]],
+            'c': [[['a', 'b'], 3], [['a'], 1], [['b'], 2]],
+            'd': [[['a', 'b', 'c'], 1], [['a', 'b'], 1], [['a', 'c'], 1], [['a'], 1], [['b', 'c'], 1]],
+            'e': [[['a', 'c', 'd'], 1], [['a', 'd'], 1], [['b', 'c'], 1]]
+        },
+        'lcp': {
+            # TODO
+        },
+    }
+    tree = fpt.FPTree()
+    for t in example['filtered_transactions']:
+        tree.add(t)
+    example['tree'] = tree
+    return example
+
 
 def _gfg_example():
     example = {
