@@ -41,7 +41,7 @@ class TestPreprocess(unittest.TestCase):
         counts_with_min_support = {2: 2, 3: 3, 4: 4, 7: 2}
         answer = [
             [4, 3, 2],
-            [4, 3, 2, 7],
+            [4, 3, 7, 2],
             [4, 7],
             [4, 3]
         ]
