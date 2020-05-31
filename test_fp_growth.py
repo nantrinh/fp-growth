@@ -7,14 +7,30 @@ from main import custom_format, run_fp
 
 class TestFPGrowth(unittest.TestCase):
 
-    @unittest.skip('')
-    def test_retail(self):
-        # transactions = [list(map(int, line.split()))
-        #                 for line in open('retail_25k.dat')]
-        prefix = 'retail'
-        transactions = [list(map(int, line.split()))
-                        for line in open('retail_100.dat')]
+    def test_retail_500(self):
+        prefix = 'retail_500'
+        with open('retail_500.dat') as f:
+            transactions = [list(map(int, line.split()))
+                        for line in f]
+        test_cases = ((3, 4), (4, 5))
+        for min_length, min_support in test_cases: 
+            self.check_fp(transactions, prefix, min_length, min_support)
 
+    def test_retail_1000(self):
+        prefix = 'retail_1000'
+        with open('retail_1000.dat') as f:
+            transactions = [list(map(int, line.split()))
+                        for line in f]
+        test_cases = ((3, 4), (4, 5))
+        for min_length, min_support in test_cases: 
+            self.check_fp(transactions, prefix, min_length, min_support)
+
+
+    def test_retail_100(self):
+        prefix = 'retail_100'
+        with open('retail_100.dat') as f:
+            transactions = [list(map(int, line.split()))
+                        for line in f]
         test_cases = ((1, 2), (2, 2), (2, 3), (3, 2), (3, 3), (3, 4), (4, 3), (4, 4))
         for min_length, min_support in test_cases: 
             self.check_fp(transactions, prefix, min_length, min_support)
@@ -23,12 +39,10 @@ class TestFPGrowth(unittest.TestCase):
         prefix= 'gfg'
         raw = ['ekmnoy', 'deknoy', 'aekm', 'ckmuy', 'ceiko']
         transactions = [list(x) for x in raw]
-        #test_cases = ((1, 2), (2, 2), (2, 3), (3, 2), (3, 3), (3, 4), (4, 3))
-        test_cases = [(1, 2)]
+        test_cases = ((1, 2), (2, 2), (2, 3), (3, 2), (3, 3), (3, 4), (4, 3))
         for min_length, min_support in test_cases: 
             self.check_fp(transactions, prefix, min_length, min_support)
 
-    @unittest.skip('')
     def test_slides_examples(self):
         prefix = 'slides'
         raw = ['ab', 'bcd', 'acde', 'ade', 'abc', 'abcd', 'a', 'abc', 'abd', 'bce']
