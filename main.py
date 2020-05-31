@@ -12,15 +12,13 @@ def run_fp(transactions, min_length, min_support):
 if __name__ == "__main__":
 
     prefix = 'retail_25k'
-    with open('retail_25k.dat') as f:
-        transactions = [list(map(int, line.split()))
-                    for line in f]
+    transactions = [list(map(int, line.split())) for line in open('retail_25k.dat')]
 
-    test_cases = [(3, 4)]
+    min_length = 3
+    min_support = 4
 
-    for min_length, min_support in test_cases: 
-        output_filename = f'outputs/{prefix}_{min_length}_{min_support}_output.txt'
-        f = open(output_filename, 'w')
-        for res in run_fp(transactions, min_length=min_length, min_support=min_support):
-            f.write(res + '\n')
-        f.close()
+    output_filename = 'output.txt'
+    f = open(output_filename, 'w')
+    for res in run_fp(transactions, min_length=min_length, min_support=min_support):
+        f.write(res + '\n')
+    f.close()
