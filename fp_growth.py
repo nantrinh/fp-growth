@@ -34,8 +34,8 @@ class FPGrowth:
                 for result in self._itemsets_with_suffix(cond_tree, temp):
                     yield result
 
-    def _conditional_tree(self, prefix_paths_with_suppports):
+    def _conditional_tree(self, prefix_paths_with_supports):
         tree = fp_tree.FPTree()
-        for path, support in prefix_paths_with_suppports:
+        for path, support in prefix_paths_with_supports:
             tree.add(path, support)
         return tree
