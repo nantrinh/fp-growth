@@ -34,6 +34,7 @@ def clean(transactions, counts_with_min_support):
     transactions = [list(set(t).intersection(
         set(counts_with_min_support.keys()))) for t in transactions]
     for t in transactions:
-        t.sort(key=lambda v: counts_with_min_support[v], reverse=True)
+        # if there's a tie in value, put the larger key first
+        t.sort(key=lambda k: (counts_with_min_support[k], k), reverse=True)
     return transactions
 
