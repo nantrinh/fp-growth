@@ -92,12 +92,10 @@ class FPTree:
         Returns a list of tuples
         [(path1, support1), (path2, support2), ...] 
         """
-        paths = []
         for n in self.nodes(item):
-            temp = [item]
+            path = [item]
             leaf_count = n.count
             for a in n.ancestors():
-                temp.append(a.value)
-            temp.reverse()
-            paths.append((temp, leaf_count))
-        return paths
+                path.append(a.value)
+            path.reverse()
+            yield (path, leaf_count)
