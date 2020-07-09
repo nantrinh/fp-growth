@@ -10,9 +10,7 @@ def run_fp(transactions, min_length, min_support):
         yield custom_format(itemset, support)
 
 if __name__ == "__main__":
-
-    prefix = 'retail_25k'
-    transactions = [list(map(int, line.split())) for line in open('retail_25k.dat')]
+    transactions = [list(map(int, line.split())) for line in open('transactions.dat')]
 
     min_length = 3
     min_support = 4

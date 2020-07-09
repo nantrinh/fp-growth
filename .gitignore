@@ -2,3 +2,7 @@ venv/
 *.dat
 *.pdf
 __pycache__/
+solutions/
+outputs/
+output.txt
+_*
