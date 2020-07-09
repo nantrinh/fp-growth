@@ -11,8 +11,8 @@ def run_fp(transactions, min_length, min_support):
 
 if __name__ == "__main__":
 
-    prefix = 'retail_25k'
-    with open('retail_25k.dat') as f:
+    prefix = 'transactions'
+    with open('transactions.dat') as f:
         transactions = [list(map(int, line.split()))
                     for line in f]
 
