@@ -10,17 +10,13 @@ def run_fp(transactions, min_length, min_support):
         yield custom_format(itemset, support)
 
 if __name__ == "__main__":
+    transactions = [list(map(int, line.split())) for line in open('transactions.dat')]
 
-    prefix = 'transactions'
-    with open('transactions.dat') as f:
-        transactions = [list(map(int, line.split()))
-                    for line in f]
+    min_length = 3
+    min_support = 4
 
-    test_cases = [(3, 4)]
-
-    for min_length, min_support in test_cases: 
-        output_filename = f'outputs/{prefix}_{min_length}_{min_support}_output.txt'
-        f = open(output_filename, 'w')
-        for res in run_fp(transactions, min_length=min_length, min_support=min_support):
-            f.write(res + '\n')
-        f.close()
+    output_filename = 'output.txt'
+    f = open(output_filename, 'w')
+    for res in run_fp(transactions, min_length=min_length, min_support=min_support):
+        f.write(res + '\n')
+    f.close()
